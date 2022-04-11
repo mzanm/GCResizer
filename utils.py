@@ -2,3 +2,8 @@
 def convert_res(x: int, y: int) -> tuple:
     # decrese by -1 because it starts at 0 not 1.
     return (round(1366 / 1920 * x) - 1, round(768 / 1080 * y) - 1)
+
+
+def write_file(path, text):
+    with open(path, "w") as fil:
+        fil.write(text)

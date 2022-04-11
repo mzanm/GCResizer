@@ -1,6 +1,7 @@
 import wx
 from FileSelectDlg import FileSelect
 import gparser
+from utils import write_file
 
 
 class Frame(wx.Frame):
@@ -8,7 +9,6 @@ class Frame(wx.Frame):
         super().__init__(None, title="GoldenCurser Resizer")
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer()
-        # add combo boxes here to choose resolution and Etc.
         self.convert_btn = wx.Button(self.pnl, label="Convert:")
         box.Add(self.convert_btn)
         self.pnl.SetSizer(box)
@@ -16,27 +16,30 @@ class Frame(wx.Frame):
 
     def open_file_dlg(self, event):
         with FileSelect(self) as dlg:
-            dlg.ShowModal()
-            text = gparser.parse(dlg.picker.GetPath())
-            r = wx.MessageBox(
-                "Clicking on no will override the original file.",
-                "Save converted data to a different file?",
-                wx.YES_NO | wx.ICON_QUESTION,
-            )
-            if r == wx.YES:
-                with wx.FileDialog(
-                    self,
-                    "Select a location to save the converted golden curser file in",
-                    wildcard="*.gc",
-                    style=wx.FD_SAVE,
-                ) as fdlg:
-                    if fdlg.ShowModal() == wx.ID_OK:
-                        save_path = fdlg.GetPath()
-                        with open(save_path, "w") as f:
-                            f.write(text)
-            else:
-                with open(dlg.picker.GetPath(), "w") as f:
-                    f.write(text)
+            res = dlg.ShowModal()
+            if res != wx.ID_OK:
+                return
+            path = dlg.picker.GetPath()
+            if not path:
+                return
+        text = gparser.parse(path)
+        r = wx.MessageBox(
+            "Clicking on no will override the original file.",
+            "Save converted data to a different file?",
+            wx.YES_NO | wx.CANCEL | wx.ICON_WARNING,
+        )
+        if r == wx.YES:
+            with wx.FileDialog(
+                self,
+                "Select a location to save the converted golden curser file in",
+                wildcard="*.gc",
+                style=wx.FD_SAVE,
+            ) as fdlg:
+                if fdlg.ShowModal() == wx.ID_OK:
+                    save_path = fdlg.GetPath()
+                    write_file(save_path, text)
+        elif r == wx.NO:
+            write_file(path, text)
 
 
 app = wx.App()
