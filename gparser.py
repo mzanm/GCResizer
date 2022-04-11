@@ -1,5 +1,5 @@
 import utils
-def parse(file_name: str) -> bool:
+def parse(file_name: str) -> str:
     final_text = ""
     with open(file_name, "r") as f:
         text = f.read()
@@ -10,8 +10,4 @@ def parse(file_name: str) -> bool:
             coordinates = parsed[1].replace(" ", "", 1).strip('"').split(",")
             converted_coordinate = utils.convert_res(int(coordinates[0]), int(coordinates[1]))
             final_text += f'{parsed[0]}= "{converted_coordinate[0]},{converted_coordinate[1]}"\n'
-    if final_text == "":
-        return False
-    with open(file_name, "w") as f2:
-        f2.write(final_text)
-    return True
+    return final_text
