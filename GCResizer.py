@@ -1,6 +1,6 @@
 import wx
 from FileSelectDlg import FileSelect
-
+import gparser
 
 class Frame(wx.Frame):
     def __init__(self):
@@ -16,8 +16,16 @@ class Frame(wx.Frame):
     def open_file_dlg(self, event):
         with FileSelect(self) as dlg:
             dlg.ShowModal()
-
-
+            text = gparser.parse(self.picker.path)
+            r = wx.MessageBox("Save converted data to a different file?", "Clicking on no will override the original file.",
+                wx.OK | wx.CANCEL | wx.ICON_QUESTION)
+            if r != wx.ID_YES:
+                fdlg = wx.FileDialog(self, "Save converted golden cursor position.", "", "", "GC files(*.gc)|*.*", wx.FD_SAVE)
+                if fdlg.ShowModal() == wx.ID_OK:
+                    save_path = fdlg.GetPath() + ".gc"
+                    with open(save_path, "w") as f: f.write(text)
+            else:
+                with open(self.picker.path, "w") as f: f.write(text)
 app = wx.App()
 main_frame = Frame()
 main_frame.Show()
