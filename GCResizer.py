@@ -19,11 +19,11 @@ class Frame(wx.Frame):
             dlg.ShowModal()
             text = gparser.parse(dlg.picker.GetPath())
             r = wx.MessageBox(
-                "Save converted data to a different file?",
                 "Clicking on no will override the original file.",
+                "Save converted data to a different file?",
                 wx.YES_NO | wx.ICON_QUESTION,
             )
-            if r != wx.ID_YES:
+            if r == wx.YES:
                 with wx.FileDialog(
                     self,
                     "Select a location to save the converted golden curser file in",
