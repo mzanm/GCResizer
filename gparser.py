@@ -1,7 +1,7 @@
 import utils
 
 
-def parse(file_name: str) -> str:
+def parse(file_name: str, from_res: tuple, to_res: tuple) -> str:
     final_text = ""
     with open(file_name, "r") as f:
         lines = f.readlines()
@@ -11,7 +11,7 @@ def parse(file_name: str) -> str:
             continue
         coordinates = parsed[1].strip().strip('"').split(",")
         converted_coordinate = utils.convert_res(
-            int(coordinates[0]), int(coordinates[1])
+            int(coordinates[0]), int(coordinates[1]), from_res, to_res
         )
         final_text += (
             f'{parsed[0]} = "{converted_coordinate[0]},{converted_coordinate[1]}"\n'

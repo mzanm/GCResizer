@@ -22,7 +22,13 @@ class Frame(wx.Frame):
             path = dlg.picker.GetPath()
             if not path:
                 return
-        text = gparser.parse(path)
+            convert_from = dlg.convert_from.GetString(dlg.convert_from.Selection).split(
+                "X"
+            )
+            convert_from = tuple([int(i.strip()) for i in convert_from])
+            convert_to = dlg.convert_to.GetString(dlg.convert_to.Selection).split("X")
+            convert_to = tuple([int(i.strip()) for i in convert_to])
+        text = gparser.parse(path, convert_from, convert_to)
         r = wx.MessageBox(
             "Clicking on no will override the original file.",
             "Save converted data to a different file?",
