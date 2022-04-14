@@ -1,5 +1,6 @@
 import wx
 from FileSelectDlg import FileSelect
+from preview_dlg import PreviewDlg
 import gparser
 from utils import write_file
 
@@ -29,6 +30,10 @@ class Frame(wx.Frame):
             convert_to = dlg.convert_to.GetString(dlg.convert_to.Selection).split("X")
             convert_to = tuple([int(i.strip()) for i in convert_to])
         text = gparser.parse(path, convert_from, convert_to)
+        with PreviewDlg(self) as vdlg:
+            vdlg.edit.SetValue(text)
+            if vdlg.ShowModal() != wx.ID_SAVE:
+                return
         r = wx.MessageBox(
             "Clicking on no will override the original file.",
             "Save converted data to a different file?",
