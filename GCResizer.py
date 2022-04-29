@@ -22,13 +22,35 @@ class Frame(wx.Frame):
                 return
             path = dlg.picker.GetPath()
             if not path:
+                r = wx.MessageBox(
+                    "Aborting...",
+                    "No file selected",
+                    wx.ICON_ERROR,
+                )
                 return
+            if not dlg.convert_from.GetString(dlg.convert_from.Selection):
+                r = wx.MessageBox(
+                    "Aborting...",
+                    "No from resolution target selected",
+                    wx.ICON_ERROR,
+                )
+                return
+            if not dlg.convert_to.GetString(dlg.convert_to.Selection):
+                r = wx.MessageBox(
+                    "Aborting...",
+                    "No to resolution target selected",
+                    wx.ICON_ERROR,
+                )
+                return
+
             convert_from = dlg.convert_from.GetString(dlg.convert_from.Selection).split(
                 "X"
             )
             convert_from = tuple([int(i.strip()) for i in convert_from])
             convert_to = dlg.convert_to.GetString(dlg.convert_to.Selection).split("X")
             convert_to = tuple([int(i.strip()) for i in convert_to])
+            print(convert_to)
+            print(convert_from)
         text = gparser.parse(path, convert_from, convert_to)
         with PreviewDlg(self) as vdlg:
             vdlg.edit.SetValue(text)
