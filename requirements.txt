@@ -1,1 +1,1 @@
-wxpython
+wxPython

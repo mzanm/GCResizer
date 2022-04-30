@@ -49,8 +49,6 @@ class Frame(wx.Frame):
             convert_from = tuple([int(i.strip()) for i in convert_from])
             convert_to = dlg.convert_to.GetString(dlg.convert_to.Selection).split("X")
             convert_to = tuple([int(i.strip()) for i in convert_to])
-            print(convert_to)
-            print(convert_from)
         text = gparser.parse(path, convert_from, convert_to)
         with PreviewDlg(self) as vdlg:
             vdlg.edit.SetValue(text)
