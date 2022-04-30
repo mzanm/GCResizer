@@ -4,11 +4,11 @@ import custom_res
 
 class FileSelect(wx.Dialog):
     def __init__(self, frame):
-        super().__init__(frame, title="Select a golden curser file")
+        super().__init__(frame, title="Select a golden cursor file")
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer()
         self.picker = wx.FilePickerCtrl(
-            self.pnl, wildcard="*.gc", message="Select a Golden Curser file"
+            self.pnl, wildcard="*.gc", message="Select a Golden Cursor file"
         )
         box.Add(self.picker)
         gbox_sizer = wx.StaticBoxSizer(wx.VERTICAL, self.pnl, "Convert options")

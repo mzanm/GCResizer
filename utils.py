@@ -7,7 +7,7 @@ MAXPLACE = Decimal(10) ** -20
 
 
 def convert_res(x: int, y: int, from_res: tuple, to_res: tuple) -> tuple:
-    # decrese by -1 because it starts at 1 not 0.
+    # decrease by -1 because it starts at 1 not 0.
     f_x = Decimal(to_res[0] - 1) / Decimal(from_res[0] - 1)
     f_y = Decimal(to_res[1] - 1) / Decimal(from_res[1] - 1)
     f_x = f_x.quantize(MAXPLACE)

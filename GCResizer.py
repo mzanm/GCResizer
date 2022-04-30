@@ -7,7 +7,7 @@ from utils import write_file
 
 class Frame(wx.Frame):
     def __init__(self):
-        super().__init__(None, title="GoldenCurser Resizer")
+        super().__init__(None, title="GoldenCursor Resizer")
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer()
         self.convert_btn = wx.Button(self.pnl, label="Convert:")
@@ -62,7 +62,7 @@ class Frame(wx.Frame):
         if r == wx.YES:
             with wx.FileDialog(
                 self,
-                "Select a location to save the converted golden curser file in",
+                "Select a location to save the converted golden cursor file in",
                 wildcard="*.gc",
                 style=wx.FD_SAVE,
             ) as fdlg:
