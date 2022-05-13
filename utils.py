@@ -1,6 +1,6 @@
 import decimal
 from decimal import Decimal
-
+import string
 
 decimal.getcontext().prec = 24
 MAXPLACE = Decimal(10) ** -20
@@ -18,3 +18,8 @@ def convert_res(x: int, y: int, from_res: tuple, to_res: tuple) -> tuple:
 def write_file(path, text):
     with open(path, "w") as fil:
         fil.write(text)
+
+
+def clean_str(text):
+    # remove all non number characters in a string.
+    return "".join([i for i in text if i in string.digits or i == " "]).strip()

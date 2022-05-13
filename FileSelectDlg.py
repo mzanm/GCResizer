@@ -8,17 +8,20 @@ class FileSelect(wx.Dialog):
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer()
         self.picker = wx.FilePickerCtrl(
-            self.pnl, wildcard="*.gc", message="Select a Golden Cursor file"
+            self.pnl,
+            wildcard="Golden Cursor files (*.gc)|*.gc",
+            message="Select a Golden Cursor file",
         )
         box.Add(self.picker)
         gbox_sizer = wx.StaticBoxSizer(wx.VERTICAL, self.pnl, "Convert options")
         gbox = gbox_sizer.GetStaticBox()
         gbox_sizer.Add(wx.StaticText(gbox, label="Convert from:"))
         resolutions = custom_res.stringify()
-        self.convert_from = wx.Choice(gbox, choices=resolutions)
+        self.convert_from = wx.Choice(gbox, choices=resolutions[1:])
         gbox_sizer.Add(self.convert_from)
         gbox_sizer.Add(wx.StaticText(gbox, label="Convert to:"))
         self.convert_to = wx.Choice(gbox, choices=resolutions)
+        self.convert_to.SetSelection(0)
         gbox_sizer.Add(self.convert_to)
         box.Add(gbox_sizer)
         box.Add(wx.Button(self.pnl, wx.ID_OK))

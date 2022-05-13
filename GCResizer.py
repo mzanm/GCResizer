@@ -1,8 +1,13 @@
 import wx
+import logging
+import traceback
+import os
+import sys
+import platform
 from FileSelectDlg import FileSelect
 from preview_dlg import PreviewDlg
 import gparser
-from utils import write_file
+from utils import clean_str
 
 
 class Frame(wx.Frame):
@@ -18,62 +23,67 @@ class Frame(wx.Frame):
     def open_file_dlg(self, event):
         with FileSelect(self) as dlg:
             res = dlg.ShowModal()
-            if res != wx.ID_OK:
-                return
-            path = dlg.picker.GetPath()
-            if not path:
-                r = wx.MessageBox(
-                    "Aborting...",
-                    "No file selected",
-                    wx.ICON_ERROR,
-                )
-                return
-            if not dlg.convert_from.GetString(dlg.convert_from.Selection):
-                r = wx.MessageBox(
-                    "Aborting...",
-                    "No from resolution target selected",
-                    wx.ICON_ERROR,
-                )
-                return
-            if not dlg.convert_to.GetString(dlg.convert_to.Selection):
-                r = wx.MessageBox(
-                    "Aborting...",
-                    "No to resolution target selected",
-                    wx.ICON_ERROR,
-                )
-                return
-
-            convert_from = dlg.convert_from.GetString(dlg.convert_from.Selection).split(
-                "X"
+        if res != wx.ID_OK:
+            return
+        path = dlg.picker.GetPath()
+        if not path or not os.path.exists(path):
+            wx.MessageBox(
+                "Aborting...",
+                "No file selected or file does not exist",
+                wx.ICON_ERROR,
             )
-            convert_from = tuple([int(i.strip()) for i in convert_from])
-            convert_to = dlg.convert_to.GetString(dlg.convert_to.Selection).split("X")
-            convert_to = tuple([int(i.strip()) for i in convert_to])
-        text = gparser.parse(path, convert_from, convert_to)
-        with PreviewDlg(self) as vdlg:
-            vdlg.edit.SetValue(text)
-            if vdlg.ShowModal() != wx.ID_SAVE:
-                return
-        r = wx.MessageBox(
-            "Clicking on no will override the original file.",
-            "Save converted data to a different file?",
-            wx.YES_NO | wx.CANCEL | wx.ICON_WARNING,
+            return
+        if dlg.convert_from.Selection < 0:
+            wx.MessageBox(
+                "Aborting...",
+                "No from resolution target selected",
+                wx.ICON_ERROR,
+            )
+            return
+        if dlg.convert_to.Selection < 0:
+            wx.MessageBox(
+                "Aborting...",
+                "No to resolution target selected",
+                wx.ICON_ERROR,
+            )
+            return
+
+        convert_from = dlg.convert_from.GetString(dlg.convert_from.Selection).split(
+            "\u00d7"
         )
-        if r == wx.YES:
-            with wx.FileDialog(
-                self,
-                "Select a location to save the converted golden cursor file in",
-                wildcard="*.gc",
-                style=wx.FD_SAVE,
-            ) as fdlg:
-                if fdlg.ShowModal() == wx.ID_OK:
-                    save_path = fdlg.GetPath()
-                    write_file(save_path, text)
-        elif r == wx.NO:
-            write_file(path, text)
+        convert_from = tuple([int(i.strip()) for i in convert_from])
+        if dlg.convert_to.Selection == 0:
+            string = dlg.convert_to.GetString(0)
+            convert_to = clean_str(string).split(" ")
+        elif dlg.convert_to.Selection > 0:
+            convert_to = dlg.convert_to.GetString(dlg.convert_to.Selection).split(
+                "\u00d7"
+            )
+        convert_to = tuple([int(i.strip()) for i in convert_to if i.strip()])
+        text = gparser.parse(path, convert_from, convert_to)
+        with PreviewDlg(self, path, text) as vdlg:
+            vdlg.ShowModal()
 
 
-app = wx.App()
-main_frame = Frame()
-main_frame.Show()
-app.MainLoop()
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename="gcresizer.log",
+        filemode="w",
+        level=logging.DEBUG,
+        format="%(levelname)s: %(module)s: %(message)s: %(asctime)s",
+    )
+
+    def exchandler(type, exc, tb):
+        logging.error(
+            "".join([str(i) for i in traceback.format_exception(type, exc, tb)])
+        )
+
+    sys.excepthook = exchandler
+    logging.info(f"running on {platform.platform()}")
+    logging.info(f"python version: {sys.version}")
+    logging.info(f"wx version: {wx.version()}")
+
+    app = wx.App()
+    main_frame = Frame()
+    main_frame.Show()
+    app.MainLoop()

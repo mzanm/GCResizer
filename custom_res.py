@@ -1,3 +1,6 @@
+import wx
+
+
 resolutions = (
     (1024, 768),
     (1280, 720),
@@ -22,7 +25,8 @@ resolutions = (
 
 
 def stringify():
-    final_list = []
+    default_size = wx.DisplaySize()
+    final_list = [f"Automatic: {default_size[0]} \u00d7 {default_size[1]} (Current display resolution"]
     for i in resolutions:
-        final_list.append(f"{i[0]} X {i[1]}")
+        final_list.append(f"{i[0]} \u00d7 {i[1]}")
     return final_list
