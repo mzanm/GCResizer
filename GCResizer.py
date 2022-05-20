@@ -14,7 +14,8 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+import ctypes
+ctypes.windll.shcore.SetProcessDpiAwareness(2)
 import wx
 import logging
 import traceback
@@ -96,6 +97,8 @@ if __name__ == "__main__":
         )
 
     sys.excepthook = exchandler
+    logging.info("Setting dpi awareness")
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
     logging.info(f"running on {platform.platform()}")
     logging.info(f"python version: {sys.version}")
     logging.info(f"wx version: {wx.version()}")

@@ -42,7 +42,7 @@ resolutions = (
 
 
 def stringify():
-    default_size = wx.DisplaySize()
+    default_size = wx.GetDisplaySize().Get()
     final_list = [f"Automatic: {default_size[0]} \u00d7 {default_size[1]} (Current display resolution"]
     for i in resolutions:
         final_list.append(f"{i[0]} \u00d7 {i[1]}")
