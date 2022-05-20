@@ -15,7 +15,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import ctypes
-ctypes.windll.shcore.SetProcessDpiAwareness(2)
 import wx
 import logging
 import traceback

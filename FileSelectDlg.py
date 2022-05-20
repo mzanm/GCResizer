@@ -1,6 +1,6 @@
 #    Gc resizer, A program to change resolution coordinates for a golden cursor file.
 
-#    Copyright (C) 2022 mazen428, mohamedSulaimanAlmarzooqi 
+#    Copyright (C) 2022 mazen428, mohamedSulaimanAlmarzooqi
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,15 +22,14 @@ import custom_res
 class FileSelect(wx.Dialog):
     def __init__(self, frame):
         super().__init__(frame, title="Select a golden cursor file")
-        self.pnl = wx.Panel(self)
         box = wx.BoxSizer()
         self.picker = wx.FilePickerCtrl(
-            self.pnl,
+            self,
             wildcard="Golden Cursor files (*.gc)|*.gc",
             message="Select a Golden Cursor file",
         )
         box.Add(self.picker)
-        gbox_sizer = wx.StaticBoxSizer(wx.VERTICAL, self.pnl, "Convert options")
+        gbox_sizer = wx.StaticBoxSizer(wx.VERTICAL, self, "Convert options")
         gbox = gbox_sizer.GetStaticBox()
         gbox_sizer.Add(wx.StaticText(gbox, label="Convert from:"))
         resolutions = custom_res.stringify()
@@ -41,6 +40,7 @@ class FileSelect(wx.Dialog):
         self.convert_to.SetSelection(0)
         gbox_sizer.Add(self.convert_to)
         box.Add(gbox_sizer)
-        box.Add(wx.Button(self.pnl, wx.ID_OK))
-        box.Add(wx.Button(self.pnl, wx.ID_CANCEL))
-        self.pnl.SetSizer(box)
+        box.Add(self.CreateButtonSizer(wx.OK | wx.CANCEL))
+        self.SetSizer(box)
+        self.picker.SetFocus()
+

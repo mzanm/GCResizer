@@ -24,21 +24,19 @@ class PreviewDlg(wx.Dialog):
         super().__init__(parent, title="Convertion result")
         self.text = text
         self.path = path
-        pnl = wx.Panel(self)
         box = wx.BoxSizer()
-        box.Add(wx.StaticText(pnl, label="Convertion succeeded"))
-        box.Add(wx.StaticText(pnl, label="Result"))
+        box.Add(wx.StaticText(self, label="Convertion succeeded"))
+        box.Add(wx.StaticText(self, label="Result"))
         self.edit = wx.TextCtrl(
-            pnl, style=wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_DONTWRAP | wx.TE_RICH2
+            self, style=wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_DONTWRAP | wx.TE_RICH2
         )
         self.edit.SetValue(self.text)
         box.Add(self.edit)
-        save = wx.Button(pnl, wx.ID_SAVE)
+        save = wx.Button(self, wx.ID_SAVE)
         save.Bind(wx.EVT_BUTTON, self.on_save)
         box.Add(save)
-        box.Add(wx.Button(pnl, wx.ID_CLOSE))
-        pnl.SetSizer(box)
-        self.SetEscapeId(wx.ID_CLOSE)
+        box.Add(wx.Button(self, wx.ID_CLOSE))
+        self.SetSizer(box)
 
     def on_save(self, event):
         menu = wx.Menu()
