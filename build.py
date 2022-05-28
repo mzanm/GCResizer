@@ -1,3 +1,11 @@
+# GCResizer Build script.
+# Copyright (C) 2022 mazen428, mohamedSulaimanAlmarzooqi
+# This program is free software:
+#  you can redistribute it and/or modify it under the terms of the GNU General Public License 3.0 or later
+
+# See the file LICENSE for more details.
+
+
 import shutil
 import os
 import PyInstaller.__main__ as pm
@@ -39,5 +47,5 @@ pm.run(
         "--name=GCResizer",
     ]
 )
-
+cleanup(False)
 shutil.copyfile("LICENSE", "dist\\LICENSE")

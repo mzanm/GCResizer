@@ -1,6 +1,6 @@
 #    Gc resizer, A program to change resolution coordinates for a golden cursor file.
 
-#    Copyright (C) 2022 mazen428, mohamedSulaimanAlmarzooqi 
+#    Copyright (C) 2022 mazen428, mohamedSulaimanAlmarzooqi
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -14,8 +14,8 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import ctypes
 import wx
+import ctypes
 import logging
 import traceback
 import os
@@ -23,6 +23,7 @@ import sys
 import platform
 from FileSelectDlg import FileSelect
 from preview_dlg import PreviewDlg
+from about_dlg import about
 import gparser
 from utils import clean_str
 
@@ -30,12 +31,22 @@ from utils import clean_str
 class Frame(wx.Frame):
     def __init__(self):
         super().__init__(None, title="GoldenCursor Resizer")
+        self.menubar = wx.MenuBar()
+        self.help_menu = wx.Menu()
+        self.item: wx.MenuItem = self.help_menu.Append(wx.ID_ANY, "About\tF1")
+        self.help_menu.Bind(wx.EVT_MENU, self.on_about, self.item)
+        self.menubar.Append(self.help_menu, "&Help")
+        self.SetMenuBar(self.menubar)
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer()
         self.convert_btn = wx.Button(self.pnl, label="Convert:")
         box.Add(self.convert_btn)
         self.pnl.SetSizer(box)
         self.convert_btn.Bind(wx.EVT_BUTTON, self.open_file_dlg)
+
+    def on_about(self, event):
+        with about(self) as about_dlg:
+            about_dlg.ShowModal()
 
     def open_file_dlg(self, event):
         with FileSelect(self) as dlg:
