@@ -27,6 +27,7 @@ cleanup(True)
 pm.run(
     [
         "--windowed",
+        "--onefile",
         "--clean",
         "GCResizer.py",
         "--exclude-module=_ssl",
@@ -44,6 +45,10 @@ pm.run(
         "--exclude-module=test",
         "--exclude-module=doctest",
         "--exclude-module=tkinter",
+      "--exclude-module=urllib",
+      "--exclude-module=asyncio",
+  
+  
         "--name=GCResizer",
     ]
 )
