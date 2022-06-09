@@ -12,15 +12,19 @@ import custom_res
 
 class FileSelect(wx.Dialog):
     def __init__(self, frame):
-        super().__init__(frame, title="Select a golden cursor file")
-        box = wx.BoxSizer()
+        super().__init__(
+            frame,
+            title="Select a golden cursor file",
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        )
+        box = wx.BoxSizer(wx.VERTICAL)
         self.picker = wx.FilePickerCtrl(
             self,
             wildcard="Golden Cursor files (*.gc)|*.gc",
             message="Select a Golden Cursor file",
         )
-        box.Add(self.picker)
-        gbox_sizer = wx.StaticBoxSizer(wx.VERTICAL, self, "Convert options")
+        box.Add(self.picker, 0, wx.ALL, 10)
+        gbox_sizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, "Convert options")
         gbox = gbox_sizer.GetStaticBox()
         gbox_sizer.Add(wx.StaticText(gbox, label="Convert from:"))
         resolutions = custom_res.stringify()
@@ -30,7 +34,7 @@ class FileSelect(wx.Dialog):
         self.convert_to = wx.Choice(gbox, choices=resolutions)
         self.convert_to.SetSelection(0)
         gbox_sizer.Add(self.convert_to)
-        box.Add(gbox_sizer)
-        box.Add(self.CreateButtonSizer(wx.OK | wx.CANCEL))
+        box.Add(gbox_sizer, 0, wx.ALL, 10)
+        box.Add(self.CreateSeparatedButtonSizer(wx.OK | wx.CANCEL))
         self.SetSizer(box)
         self.picker.SetFocus()

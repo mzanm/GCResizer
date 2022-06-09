@@ -12,22 +12,29 @@ from utils import write_file
 
 class PreviewDlg(wx.Dialog):
     def __init__(self, parent, path, text):
-        super().__init__(parent, title="Convertion result")
+        super().__init__(
+            parent,
+            title="Convertion result",
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        )
         self.text = text
         self.path = path
-        box = wx.BoxSizer()
-        box.Add(wx.StaticText(self, label="Convertion succeeded"))
+        box = wx.BoxSizer(wx.VERTICAL)
+        box.Add(wx.StaticText(self, label="Convertion succeeded, click save to save the converted file."))
         box.Add(wx.StaticText(self, label="Result"))
         self.edit = wx.TextCtrl(
             self, style=wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_DONTWRAP | wx.TE_RICH2
         )
         self.edit.SetValue(self.text)
-        box.Add(self.edit)
+        box.Add(self.edit, 0, wx.EXPAND)
         save = wx.Button(self, wx.ID_SAVE)
         save.Bind(wx.EVT_BUTTON, self.on_save)
         box.Add(save)
         box.Add(wx.Button(self, wx.ID_CLOSE))
+        self.SetEscapeId(wx.ID_CLOSE)
         self.SetSizer(box)
+        box.Fit(self)
+        self.Layout()
 
     def on_save(self, event):
         menu = wx.Menu()

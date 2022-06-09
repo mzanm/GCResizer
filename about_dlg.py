@@ -20,9 +20,16 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 class about(wx.Dialog):
     def __init__(self, parent):
-        super().__init__(parent, title="About")
+        super().__init__(
+            parent, title="About", style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER
+        )
         sizer = wx.BoxSizer(wx.VERTICAL)
-        text = wx.TextCtrl(self, value=about_text, style = wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_RICH2, size = (500, 500))
+        text = wx.TextCtrl(
+            self,
+            value=about_text,
+            style=wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_RICH2,
+            size=(500, 500),
+        )
         sizer.Add(text, 0, wx.ALL | wx.EXPAND, 10)
         link_sizer = wx.BoxSizer(wx.HORIZONTAL)
         link_sizer.Add(
@@ -37,7 +44,9 @@ class about(wx.Dialog):
         )
         sizer.Add(link_sizer, 0, wx.ALL, 5)
         sizer.Add(wx.Button(self, wx.ID_CLOSE))
-        self.Bind(wx.EVT_BUTTON, lambda event: self.EndModal(wx.ID_CLOSE), id = wx.ID_CLOSE)
+        self.Bind(
+            wx.EVT_BUTTON, lambda event: self.EndModal(wx.ID_CLOSE), id=wx.ID_CLOSE
+        )
         self.SetSizer(sizer)
         self.SetEscapeId(wx.ID_CLOSE)
         sizer.Fit(self)

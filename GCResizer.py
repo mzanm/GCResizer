@@ -38,11 +38,13 @@ class Frame(wx.Frame):
         self.menubar.Append(self.help_menu, "&Help")
         self.SetMenuBar(self.menubar)
         self.pnl = wx.Panel(self)
-        box = wx.BoxSizer()
-        self.convert_btn = wx.Button(self.pnl, label="Convert:")
-        box.Add(self.convert_btn)
+        box = wx.BoxSizer(wx.VERTICAL)
+        self.convert_btn = wx.Button(self.pnl, label="Convert:", size = (200, 200))
+        box.Add(self.convert_btn, 0, wx.ALL)
         self.pnl.SetSizer(box)
         self.convert_btn.Bind(wx.EVT_BUTTON, self.open_file_dlg)
+        self.Center()
+        self.convert_btn.SetFocus()
 
     def on_about(self, event):
         with about(self) as about_dlg:
@@ -54,7 +56,7 @@ class Frame(wx.Frame):
         if res != wx.ID_OK:
             return
         path = dlg.picker.GetPath()
-        if not path or not os.path.exists(path):
+        if not path or not os.path.isfile(path):
             wx.MessageBox(
                 "Aborting...",
                 "No file selected or file does not exist",
