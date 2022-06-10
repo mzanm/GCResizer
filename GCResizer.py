@@ -39,7 +39,7 @@ class Frame(wx.Frame):
         self.SetMenuBar(self.menubar)
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer(wx.VERTICAL)
-        self.convert_btn = wx.Button(self.pnl, label="Convert:", size = (200, 200))
+        self.convert_btn = wx.Button(self.pnl, label="Convert:", size=(200, 200))
         box.Add(self.convert_btn, 0, wx.ALL)
         self.pnl.SetSizer(box)
         self.convert_btn.Bind(wx.EVT_BUTTON, self.open_file_dlg)

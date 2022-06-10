@@ -20,7 +20,12 @@ class PreviewDlg(wx.Dialog):
         self.text = text
         self.path = path
         box = wx.BoxSizer(wx.VERTICAL)
-        box.Add(wx.StaticText(self, label="Convertion succeeded, click save to save the converted file."))
+        box.Add(
+            wx.StaticText(
+                self,
+                label="Convertion succeeded, click save to save the converted file.",
+            )
+        )
         box.Add(wx.StaticText(self, label="Result"))
         self.edit = wx.TextCtrl(
             self, style=wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_DONTWRAP | wx.TE_RICH2
