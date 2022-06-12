@@ -7,7 +7,7 @@
 
 
 import wx
-import wx.adv
+from link import LinkCtrl
 
 
 about_text = """GCResizer.
@@ -21,7 +21,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 class about(wx.Dialog):
     def __init__(self, parent):
         super().__init__(
-            parent, title="About", style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER
+            parent,
+            title="About",
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+            size=(800, 600),
         )
         sizer = wx.BoxSizer(wx.VERTICAL)
         text = wx.TextCtrl(
@@ -33,12 +36,12 @@ class about(wx.Dialog):
         sizer.Add(text, 0, wx.ALL | wx.EXPAND, 10)
         link_sizer = wx.BoxSizer(wx.HORIZONTAL)
         link_sizer.Add(
-            wx.adv.HyperlinkCtrl(
+            LinkCtrl(
                 self, label="Homepage", url="https://github.com/mazen428/GCResizer"
             )
         )
         link_sizer.Add(
-            wx.adv.HyperlinkCtrl(
+            LinkCtrl(
                 self, label="License", url="https://www.gnu.org/licenses/gpl-3.0.txt"
             )
         )
