@@ -1,2 +1,2 @@
 wxPython
-pyinstaller
+py2exe
