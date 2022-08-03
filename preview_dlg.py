@@ -23,7 +23,7 @@ class PreviewDlg(wx.Dialog):
         box.Add(
             wx.StaticText(
                 self,
-                label="Convertion succeeded, click save to save the converted file.",
+                label="Convertion succeeded.",
             )
         )
         box.Add(wx.StaticText(self, label="Result"))
