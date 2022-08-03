@@ -20,10 +20,15 @@ def parse(file_name: str, from_res: tuple, to_res: tuple) -> str:
     )
     start = time.perf_counter_ns()
     for i in lines:
+        i = i.strip()
+        if not i or i.startswith("#") or i.startswith(";"):
+            continue
         parsed = i.split("=")
         if len(parsed) != 2:
             continue
         coordinates = parsed[1].strip().strip('"').split(",")
+        coordinates = tuple([int(t) for t in coordinates])
+
         converted_coordinate = utils.convert_res(
             int(coordinates[0]), int(coordinates[1]), from_res, to_res
         )

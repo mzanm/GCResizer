@@ -21,11 +21,11 @@ import traceback
 import os
 import sys
 import platform
-from FileSelectDlg import FileSelect
+from ConvertDlg import FileSelect
 from preview_dlg import PreviewDlg
 from about_dlg import about
 import gparser
-from utils import clean_str
+from utils import clean_str, convert_res
 
 
 class Frame(wx.Frame):
@@ -39,8 +39,10 @@ class Frame(wx.Frame):
         self.SetMenuBar(self.menubar)
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer(wx.VERTICAL)
-        self.convert_btn = wx.Button(self.pnl, label="Convert:", size=(200, 200))
-        box.Add(self.convert_btn, 0, wx.ALL)
+        self.convert_btn = wx.Button(self.pnl, label="Convert:")
+        box.Add(self.convert_btn, 0, wx.ALL, 20)
+        self.about_btn = wx.Button(self.pnl, wx.ID_ABOUT)
+        self.about_btn.Bind(wx.EVT_BUTTON, lambda event: self.on_about(None))
         self.pnl.SetSizer(box)
         self.convert_btn.Bind(wx.EVT_BUTTON, self.open_file_dlg)
         self.Center()
@@ -55,25 +57,28 @@ class Frame(wx.Frame):
             res = dlg.ShowModal()
         if res != wx.ID_OK:
             return
-        path = dlg.picker.GetPath()
-        if not path or not os.path.isfile(path):
-            wx.MessageBox(
-                "Aborting...",
-                "No file selected or file does not exist",
-                wx.ICON_ERROR,
-            )
-            return
+        if dlg.book.GetSelection() == 0:
+            path = dlg.picker.GetPath()
+            if not path or not os.path.isfile(path):
+                wx.MessageBox(
+                    "No file selected or file does not exist",
+                    "Error",
+                    wx.ICON_ERROR,
+                )
+                return
+        if dlg.book.GetSelection() == 1:
+            path = dlg.selector.GetCoordinates()
         if dlg.convert_from.Selection < 0:
             wx.MessageBox(
-                "Aborting...",
                 "No from resolution target selected",
+                "Error",
                 wx.ICON_ERROR,
             )
             return
         if dlg.convert_to.Selection < 0:
             wx.MessageBox(
-                "Aborting...",
                 "No to resolution target selected",
+                "Error",
                 wx.ICON_ERROR,
             )
             return
@@ -82,6 +87,15 @@ class Frame(wx.Frame):
             "\u00d7"
         )
         convert_from = tuple([int(i.strip()) for i in convert_from])
+        if isinstance(path, tuple) and (
+            path[0] - 2 > convert_from[0] or path[1] - 2 > convert_from[1]
+        ):
+            wx.MessageBox(
+                f"Coordinates must be in the range that is converted from: {convert_from[0]}, {convert_from[1]}",
+                "Error",
+                wx.ICON_ERROR,
+            )
+            return
         if dlg.convert_to.Selection == 0:
             string = dlg.convert_to.GetString(0)
             convert_to = clean_str(string).split(" ")
@@ -90,7 +104,11 @@ class Frame(wx.Frame):
                 "\u00d7"
             )
         convert_to = tuple([int(i.strip()) for i in convert_to if i.strip()])
-        text = gparser.parse(path, convert_from, convert_to)
+        if isinstance(path, tuple):
+            text = convert_res(*path, convert_from, convert_to)
+            text = f"{text[0]}, {text[1]}"
+        elif isinstance(path, str):
+            text = gparser.parse(path, convert_from, convert_to)
         with PreviewDlg(self, path, text) as vdlg:
             vdlg.ShowModal()
 

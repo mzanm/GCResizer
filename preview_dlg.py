@@ -32,14 +32,25 @@ class PreviewDlg(wx.Dialog):
         )
         self.edit.SetValue(self.text)
         box.Add(self.edit, 0, wx.EXPAND)
+        copy = wx.Button(self, wx.ID_COPY)
+        copy.Bind(wx.EVT_BUTTON, self.on_copy)
         save = wx.Button(self, wx.ID_SAVE)
         save.Bind(wx.EVT_BUTTON, self.on_save)
+        box.Add(copy)
         box.Add(save)
         box.Add(wx.Button(self, wx.ID_CLOSE))
         self.SetEscapeId(wx.ID_CLOSE)
         self.SetSizer(box)
         box.Fit(self)
         self.Layout()
+        if not isinstance(self.path, str):
+            save.Hide()
+            save.Disable()
+
+    def on_copy(self, event):
+        self.edit.SetFocus()
+        self.edit.SelectAll()
+        self.edit.Copy()
 
     def on_save(self, event):
         menu = wx.Menu()
