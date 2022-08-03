@@ -23,7 +23,7 @@ class FileSelect(wx.Dialog):
         self.book.AddPage(self.picker, "Convert .gc file", True)
         self.selector = CoordsSelect(self.book)
         self.book.AddPage(self.selector, "Convert one coordinate")
-        box.Add(self.book, 0, wx.ALL, 10)
+        box.Add(self.book, 0, wx.ALL | wx.EXPAND, 10)
         gbox_sizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, "Convert options")
         gbox = gbox_sizer.GetStaticBox()
         gbox_sizer.Add(wx.StaticText(gbox, label="Convert from:"))
@@ -34,9 +34,11 @@ class FileSelect(wx.Dialog):
         self.convert_to = wx.Choice(gbox, choices=resolutions)
         self.convert_to.SetSelection(0)
         gbox_sizer.Add(self.convert_to)
-        box.Add(gbox_sizer, 0, wx.ALL, 10)
-        box.Add(self.CreateSeparatedButtonSizer(wx.OK | wx.CANCEL))
+        box.Add(gbox_sizer, 0, wx.ALL | wx.EXPAND, 10)
+        box.Add(self.CreateSeparatedButtonSizer(wx.OK | wx.CANCEL), 0, wx.ALL | wx.EXPAND, 5)
         self.SetSizer(box)
+        box.Fit(self)
+        self.Layout()
         self.picker.picker.SetFocus()
 
 

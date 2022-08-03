@@ -40,12 +40,15 @@ class Frame(wx.Frame):
         self.pnl = wx.Panel(self)
         box = wx.BoxSizer(wx.VERTICAL)
         self.convert_btn = wx.Button(self.pnl, label="Convert:")
-        box.Add(self.convert_btn, 0, wx.ALL, 20)
         self.about_btn = wx.Button(self.pnl, wx.ID_ABOUT)
         self.about_btn.Bind(wx.EVT_BUTTON, lambda event: self.on_about(None))
-        self.pnl.SetSizer(box)
+        box.Add(self.convert_btn, 0, wx.ALL | wx.EXPAND, 20)
+        box.Add(self.about_btn, 0, wx.ALL, 20)
         self.convert_btn.Bind(wx.EVT_BUTTON, self.open_file_dlg)
+        self.pnl.SetSizer(box)
         self.Center()
+        box.Fit(self)
+        self.pnl.Layout()
         self.convert_btn.SetFocus()
 
     def on_about(self, event):
