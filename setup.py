@@ -17,6 +17,7 @@ import py2exe
 sys.argv.append("py2exe")
 
 setup(
+    py_modules=[],
     windows=["GCResizer.py"],
     zipfile=None,
     options={
